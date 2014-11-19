@@ -18,7 +18,8 @@ int RegSaiz = 0;
 
 //globales temporales
 string line;
-
+array<char*> tNames();
+array<char*> tValue ();
 
 decriptor::decriptor(string pline) {
     line = pline;
@@ -28,8 +29,9 @@ decriptor::decriptor(string pline) {
 string decriptor::NextWord() {
     string bhla = "";
     int cut = line.find(' ');
-    line = test.substr(0, cut);
-    test = test.substr(cut+1, line.length());
+    bhla = line.substr(0, cut);
+    line = line.substr(cut+1, line.length());
+    cout << bhla << endl;
     return bhla;
 }
 
@@ -95,17 +97,39 @@ void decriptor::getCreationArguments () {
     int split = 0;
     int cut = 0;
     int saiz = 0;
+    while (line.length()>1) { // ~
+        cut = line.find(' ');
+        if (0==line.substr(0, cut).compare("RAID")) {
+            break;
+        }
+        else {
+            split = line.find(':');
+            col = line.substr(0, split);
+            saiz = StrToInt(line.substr(split+1, cut-(split-1))); //~ substr is not reliable
+            line = line.substr(cut+1, line.length());
 
-    cut = line.find(' ');
-    while(0!=line.substr(0, cut).compare("RAID")) {
-    split = line.find(':');
-    col = line.substr(0, split);
-    saiz = StrToInt(line.substr(split+1, cut-(split-1))); //~ substr is not reliable
-    line = line.substr(cut+1, line.length());
+            RegSaiz += saiz;
+            tNames().insert(0, col);
+            tValues().insert(0, saiz);
+        }
+    }
+}
 
-    RegSaiz += saiz;
-    cNames().insert(0, col);
-    cSais().insert(0, saiz);
+void decriptor::getArguments () {
+    string col = "";
+    int split = 0;
+    int cut = 0;
+    string val = "_";
+    while (line.length()>1) { // ~
+        cut = line.find(' ');
+            split = line.find(':');
+            col = line.substr(0, split);
+            val = StrToInt(line.substr(split+1, cut-(split-1))); //~ substr is not reliable
+            line = line.substr(cut+1, line.length());
+
+            RegSaiz += saiz;
+            tNames().insert(0, col);
+            tValues().insert(0, saiz);
     }
 }
 
@@ -139,15 +163,18 @@ void decriptor::decript () {
     if (firstWord == "INSERT") {
         if (NextWord() == "INTO"){
             fName = NextWord();
-            //filesystem->writeNewLineToFile(&fName, &cData, &cPos);
+            //filesystem->writeNewLineToFile(&fName, &cData, &cPos);test
         }
     }
     if (firstWord == "SELECT") {
         cName = NextWord();
-        if (cName == "*") {
-            //filesystem->readFromFile(&NextWord(), &cNames());
-        } else {
-            //filesystem->readFromFile(&fileName , &ColNameToIndex(cName), &1);
+        if (NextWord()=="FROM") {
+            fname = NextWord();
+            if (cName == "*") {
+                //filesystem->readFromFile(&NextWord(), &cNames());
+            } else {
+                //filesystem->readFromFile(&fileName , &ColNameToIndex(cName), &1);
+            }
         }
     }
     if (firstWord == "UPDATE") {
@@ -155,40 +182,48 @@ void decriptor::decript () {
         if (NextWord() == "SET") {
             cName = NextWord();
         } if (NextWord() == "TO") {
-
+            getArguments();
+            //filesystem->update("&Daniel", &fName, 1 , 1);
         }
-        //filesystem->update("&Daniel", &fName, 1 , 1);
     }
-    if (NextWord() == "DELETE") {
+    if (firstWord == "DELETE") {
         if (NextWord() = "FROM") {
             fName = NextWord();
-            //filesystem->deleteData(&fName , "Nombre" , "Luis");
+            cName = NextWord();
+            uName = NextWord();
+            //filesystem->deleteData(&fName , cName" , uName);
         }
     }
     if (firstWord == "CREATE"){
         if (NextWord() == "INDEX"){
             if (NextWord() == "ON"){
+                fName = NextWord();
+                cName = NextWord();
                 cout << "NOT YET IMPLEMENTED" << endl;
             }
         }
     }
     if (firstWord == "COMPRESS"){
         if (NextWord() == "TABLE"){
+            fName = NextWord();
             cout << "NOT YET IMPLEMENTED" << endl;
         }
     }
     if (firstWord == "BACKUP"){
         if (NextWord() == "TABLE"){
+            fName = NextWord();
             //filesystem->backUpFile(NextWord());
         }
     }
     if (firstWord == "RESTORE"){
         if (NextWord() == "TABLE"){
+            fName = NextWord();
             //filesystem->restoreFile(NextWord());
         }
     }
     if (firstWord == "DROP"){
         if (NextWord() == "USER") {
+            uName = NextWord();
             //filesystem->dropUser(NextWord());
         }
     }
