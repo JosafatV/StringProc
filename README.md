@@ -27,6 +27,10 @@ COMPRESS TABLE armamento
 BACKUP TABLE armamento
 RESTORE TABLE armamento
 
+CREATE USER Luis PASSWORD 0000
+CREATE USER Josafat PASSWORD 1234
+CREATE USER Danel PASSWORD qwer
+
 DROP USER Daniel
 GRANT fullaccess ON armamento TO Josafat
 REVOKE fullaccess ON armamento TO Luis
