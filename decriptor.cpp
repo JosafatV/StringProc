@@ -20,7 +20,7 @@ int RegSaiz = 0;
 string line;
 
 
-decriptor::decriptor(strng pline) {
+decriptor::decriptor(string pline) {
     line = pline;
     decript();
 }
