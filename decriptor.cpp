@@ -221,10 +221,20 @@ void decriptor::decript () {
             //filesystem->restoreFile(NextWord());
         }
     }
+    if (firstWord == "CREATE") {
+        if (NextWord()== "USER"){
+            string pass = "";
+            uName = NextWord();
+            if (NextWord() == "PASSWORD"){
+            pass = NextWord();
+            //filesystem->createUser(&uName, &pass);
+            }
+        }
+    }
     if (firstWord == "DROP"){
         if (NextWord() == "USER") {
             uName = NextWord();
-            //filesystem->dropUser(NextWord());
+            //filesystem->dropUser(uName);
         }
     }
     string permit = "";
