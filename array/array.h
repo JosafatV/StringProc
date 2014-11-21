@@ -97,6 +97,15 @@ void array<K>::removeAllOcurrencesOf(K pElement){
     }
 }
 
+template <typename K>
+void array<K>::resize(){
+    K* newBuffer = (K*)calloc((this->_lenght*2), sizeof(K));
+    for (int counter = 0 ; counter < this->_lenght - 1 ; counter++){
+        *(newBuffer + counter) = *(this->_arrayBuffer + counter);
+    }
+    this->_arrayBuffer = newBuffer;
+}
+
 /*###################################### OPERATOR OVERLOAD #################################################################**/
 //In order to work with normals assignments
 template<typename K>

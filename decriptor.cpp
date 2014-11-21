@@ -7,38 +7,41 @@
 #include <string.h>
 #include "array/array.h"
 #include "decriptor.h"
+
 using namespace std;
 
-
-//globales principales
-string fileName = "";
-array<char*> cNames();
-array<int> cSais ();
-int RegSaiz = 0;
-
-//globales temporales
-string line;
-
-
 decriptor::decriptor(string pline) {
-    line = pline;
+    this->line = pline;
+    this->cNames = array <char*>(255);
+    this->cSais = array <int > (255);
+    this->RegSaiz = 0;
+    this->fileName = "";
     decript();
 }
 
 string decriptor::NextWord() {
     string bhla = "";
-    int cut = line.find(' ');
-    line = test.substr(0, cut);
-    test = test.substr(cut+1, line.length());
+
+    int cut = this->line.find(' ');
+    bhla = this->line.substr(0, cut);
+    this->line =  this->line.substr(cut+1, this->line.length());
     return bhla;
 }
+
+
+string charToStr(char* pChar){
+    string toReturn = "";
+    toReturn.assign(pChar , sizeof(pChar));
+    return toReturn;
+}
+
 
 int decriptor::ColNameToIndex(string pName) {
     string ColName = "";
     int Index = -1;
-    for (int i = 0; i<cNames.getLenght(); i++) {
-        ColName = cNames[i];
-        if (0==cNames.compare(pName)) {
+    for (int i = 0; i < cNames.getLenght(); i++) {
+        ColName = charToStr(cNames[i]);
+        if (ColName.compare(pName)) {
             Index=i;
             break;
         }
@@ -47,46 +50,7 @@ int decriptor::ColNameToIndex(string pName) {
 }
 
 int decriptor::StrToInt (string ToParse) {
-    string unit;
-    int unyt = 0;
-    int number = 0;
-
-    while (ToParse!=("")) {
-    unit = ToParse.substr(0, 1);
-    if (0==unit.compare("0")) {
-        unyt = 0;
-    }
-    if (0==unit.compare("1")) {
-        unyt = 1;
-    }
-    if (0==unit.compare("2")) {
-        unyt = 2;
-    }
-    if (0==unit.compare("3")) {
-        unyt = 3;
-    }
-    if (0==unit.compare("4")) {
-        unyt = 4;
-    }
-    if (0==unit.compare("5")) {
-        unyt = 5;
-    }
-    if (0==unit.compare("6")) {
-        unyt = 6;
-    }
-    if (0==unit.compare("7")) {
-        unyt = 7;
-    }
-    if (0==unit.compare("8")) {
-        unyt = 8;
-    }
-    if (0==unit.compare("9")) {
-        unyt = 9;
-    }
-    ToParse = ToParse.substr(1, ToParse.length());
-    number = (number*10);
-    number += unyt;
-    }
+    int number  = atoi(ToParse.c_str());
     return number;
 }
 
@@ -96,16 +60,16 @@ void decriptor::getCreationArguments () {
     int cut = 0;
     int saiz = 0;
 
-    cut = line.find(' ');
-    while(0!=line.substr(0, cut).compare("RAID")) {
-    split = line.find(':');
-    col = line.substr(0, split);
-    saiz = StrToInt(line.substr(split+1, cut-(split-1))); //~ substr is not reliable
-    line = line.substr(cut+1, line.length());
+    cut = this->line.find(' ');
+    while (line != "") {
+        split = this->line.find(":");
+        col = this->line.substr(0, split);
+        saiz = StrToInt(this->line.substr(split+1, cut-(split-1))); //~ substr is not reliable
+        this->line = this->line.substr(cut+1, this->line.length());
 
-    RegSaiz += saiz;
-    cNames().insert(0, col);
-    cSais().insert(0, saiz);
+        RegSaiz += saiz;
+        cNames.insert(0, const_cast<char*>( col.c_str()));
+        cSais.insert(0, saiz);
     }
 }
 
@@ -115,7 +79,7 @@ void decriptor::decript () {
     string cName = "";
     string uName = "";
 
-    firstWord = NextWord();
+    string firstWord = NextWord();
     if (firstWord == "CREATE") {
         if (NextWord() == "TABLE") {
             fileName = NextWord();
@@ -124,6 +88,8 @@ void decriptor::decript () {
                 if (NextWord()=="RAID"){
                     string RAID = "0";
                     //filesystem->creteNewFile(&RegSize ,&cSais, &cNames ,&fileName, &RAID);
+                }else{
+                    cout << "No monkeys alowed" <<endl;
                 }
             } else {
                 //filesystem->createNewFile(&RegSize ,&cSais, &cNames ,&fileName);
@@ -160,7 +126,7 @@ void decriptor::decript () {
         //filesystem->update("&Daniel", &fName, 1 , 1);
     }
     if (NextWord() == "DELETE") {
-        if (NextWord() = "FROM") {
+        if (NextWord() == "FROM") {
             fName = NextWord();
             //filesystem->deleteData(&fName , "Nombre" , "Luis");
         }

@@ -1,6 +1,9 @@
 #include "userinterface.h"
+#include <iostream>
 
-UserInterface::UserInterface()
+using namespace std;
+
+userinterface::userinterface()
 {
      cout << " WELCOME TO:                                                                              " << endl;
      cout << "     _______   ____   _______   _                                                         " << endl;
@@ -13,9 +16,8 @@ UserInterface::UserInterface()
      cout << endl;
  }
 
- closeServers(){
+void  userinterface::closeServers(){
      cout << "CLOSING SERVER . . . " << endl;
-     //closeServers();
-     Running=false;
+     bool Running=false;
      cout << "   _________________________________SERVER CLOSED________________________________________ " << endl;
  }

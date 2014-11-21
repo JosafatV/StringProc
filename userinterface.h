@@ -5,6 +5,7 @@ class userinterface
 {
 public:
     userinterface();
+    void closeServers();
 };
 
 #endif // USERINTERFACE_H
