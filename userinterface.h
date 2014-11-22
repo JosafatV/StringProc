@@ -4,8 +4,15 @@
 class userinterface
 {
 public:
+    /*!
+     * \brief userinterface paints the initial user interface
+     */
     userinterface();
-    void closeServers();
+
+    /*!
+     * \brief closingServer paints the "closing server" message
+     */
+    void closingServer();
 };
 
 #endif // USERINTERFACE_H
